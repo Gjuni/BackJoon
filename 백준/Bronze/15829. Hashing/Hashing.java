@@ -11,29 +11,18 @@ class Main {
     public static void main(String[] args) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        HashMap<String, Integer> map1 = new HashMap<String, Integer>();
         
         int repeat_num = Integer.parseInt(input.readLine());
-        String[] string= new String[repeat_num];
         String token = input.readLine();
-        string = token.split("");
-        int total = 0;
-        for(int i =0; i< repeat_num; i++) {
-            int cal = 0;
-            for(int j = 'a'; j <= 'z'; j++) {
-                if(string[i].equals(Character.toString((char)j))) {
-                    cal = (int)Math.pow(31,i)*(j-'a'+1);
-                }
-            }
-            total += cal;
-            map1.put(string[i], cal);
-        }
+        long total = 0;
+        long pow = 1;
+        int M = 1234567891;
 
-        // Iterator<Map.Entry<String,Integer>> itr = map1.entrySet().iterator();
-        // while(itr.hasNext()) {
-        //     Map.Entry<String, Integer> entry2 = itr.next();
-        //     total += entry2.getValue();
-        // }
+        for(int i =0; i< repeat_num; i++) {
+            int charaterValue = token.charAt(i)-'a'+1;
+            total = (total + charaterValue * pow)%M;
+            pow = (pow*31)%M;
+        }
 
         output.write(String.valueOf(total));
         
