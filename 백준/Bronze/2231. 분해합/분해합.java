@@ -21,12 +21,12 @@ class Main {
                 c = c/10;
             }
             c = i;
-
             if((c+total) == num) {
                 output.write(String.valueOf(c));
                 break;
             } else if(i == num-1 && (c+total) != num) {
-                output.write(String.valueOf(0));
+                output.write(String.valueOf(0)); // for문에서 1일 경우 때문에 틀림
+                                                    // 예외처리를 해주어야함
             }
         }
 
