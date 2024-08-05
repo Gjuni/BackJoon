@@ -20,11 +20,11 @@ class Main {
                 total += c%10;
                 c = c/10;
             }
-            c = i;
-            if((c+total) == num) {
-                output.write(String.valueOf(c));
+           
+            if((i+total) == num) {
+                output.write(String.valueOf(i));
                 break;
-            } else if(i == num-1 && (c+total) != num) {
+            } else if(i == num-1 && (i+total) != num) {
                 output.write(String.valueOf(0)); // for문에서 1일 경우 때문에 틀림
                                                     // 예외처리를 해주어야함
             }
