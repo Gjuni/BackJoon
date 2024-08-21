@@ -8,28 +8,26 @@ class Main {
     public static void main(String[] args) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        int room_num = Integer.parseInt(input.readLine());
 
-        long room_num = Integer.parseInt(input.readLine());
-        long count_room = 1;
-        int answer = 0;
+        int max = 1;
+        int min = 0;
+        int idx = 0;
 
-        // 외곽이 올라갈 때마다 외곽*6;
-        // 즉 수가 1외곽은 1, 2외곽은 1*6, 3외곽은 2*6
-        // 숫자는 2외곽 (1*6)+1이 max, 3외곽은 2외곽 max_num + (2*6)
         if(room_num == 1) {
-            answer = 1;
-        } else {
-            for(int i =0; i <= (room_num/6)+1; i++) {
-                count_room = count_room + 6*i;
-                
-                if(count_room >= room_num) {
-                    answer = i+1;
+            output.write(String.valueOf(1));
+        } else if(room_num > 1) {
+            while(true) {
+                idx++;
+                min = max+1; // 이전 방 + 1
+                max = max + 6*idx; // 그 다음 방 + 가장 큰 방 값
+                if(room_num >= min && room_num <= max) {
                     break;
                 }
             }
+            output.write(String.valueOf(idx+1));
         }
-        output.write(String.valueOf(answer));
-
         input.close();
         output.flush();
         output.close();
