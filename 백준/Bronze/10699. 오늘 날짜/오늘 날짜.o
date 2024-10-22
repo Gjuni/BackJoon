@@ -1,0 +1,16 @@
+	section .data
+msg: db '2024-10-22';
+len: equ $-msg		; 얘는 메모리 차지 않함
+
+	section .text
+	global main
+main
+	mov eax, 4		; system start
+	mov ebx, 1		; stdout
+	mov edx, len	;
+	mov ecx, msg	;
+	int 0x80
+
+	mov eax, 1
+	mov ebx, 0
+	int 0x80
