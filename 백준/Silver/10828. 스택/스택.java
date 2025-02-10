@@ -1,75 +1,90 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+
+class _Stack {
+    private ArrayList<Integer> array = new ArrayList<Integer>();
+
+    public _Stack() {
+        this.array = new ArrayList<>();
+    }
+
+    public void push(int data) {
+        array.add(data);
+    }
+    
+    public int pop() {
+        if(array.isEmpty()) {
+            return -1;
+        } else {
+            int index = array.size() -1; // top index\
+            int remove_num = array.remove(index);
+
+            return remove_num;
+        }
+    }
+
+    public int size() {
+        return array.size();
+    }
+
+    public int empty() {
+        if(array.isEmpty()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int top() {
+        if(array.isEmpty()) {
+            return -1;
+        } else {
+            int index = array.size()-1;
+            return array.get(index);
+        }
+    }
+};
 
 class Main {
-    public class IntStack {
-        int top;
-        int size;
-        int[] stack;
+ public static void main(String[] args) throws IOException {
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        public IntStack(int size) {
-            this.size = size;
-            stack = new int[size];
-            top = -1;
-        }
-        public boolean isFull() {
-            return (top == stack.length-1);
-        }
+    _Stack stack = new _Stack();
 
-        public boolean isEmpty() {
-            return (top == -1);
-        }
-        public int top() {
-            if(isEmpty()) {
-                return -1;
-            }
-            return stack[top];
-        }
+    int repeat_num = Integer.parseInt(input.readLine());
 
-        public void push(int item) {
-            if(isFull()) {
-                return;
-            }
-            stack[++top] = item;
-        }
+    for(int i =0; i< repeat_num; i++) {
+        StringTokenizer token = new StringTokenizer(input.readLine());
 
-        public int pop() {
-            if(isEmpty()) {
-                return -1;
-            }
-            return stack[top--];
-        }
-        public int size() {
-            return top+1;
-        }  
-        public int empty() {
-            return isEmpty() ? 1 : 0;
+        String commend = token.nextToken();
+
+        switch (commend) {
+            case "pop" :
+                output.write(String.valueOf(stack.pop())+"\n");
+                break;
+            case "size" :
+                output.write(String.valueOf(stack.size())+"\n");
+                break;
+            case "empty" :
+                output.write(String.valueOf(stack.empty())+"\n");
+                break;
+            case "top" :
+                output.write(String.valueOf(stack.top())+"\n");
+                break;
+            default:
+                int data = Integer.parseInt(token.nextToken());
+                stack.push(data);
         }
     }
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        int repeat_num = Integer.parseInt(input.readLine());
-        Main br = new Main();
-        IntStack stack = br.new IntStack(repeat_num);
-
-        for(int i =0; i< repeat_num; i++) {
-            String commad = input.readLine();
-
-            if(commad.startsWith("push")) {
-                int item = Integer.parseInt(commad.split(" ")[1]);
-                stack.push(item);
-            } else if(commad.equals("pop")) {
-                System.out.println(stack.pop());
-            } else if(commad.equals("top")) {
-                System.out.println(stack.top());
-            } else if(commad.equals("size")) {
-                System.out.println(stack.size());
-            } else if(commad.equals("empty")) {
-                System.out.println(stack.empty());
-            }
-        }
-
-        input.close();
-    }
+    
+    output.close();
+    input.close();
+ }
 }
