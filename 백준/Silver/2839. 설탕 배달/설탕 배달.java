@@ -4,35 +4,43 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        // 5부터 탐색 그 후 5의 갯수 -1
-        // 3은 5가 빠질 때 초기 값보다 커지기 전만큼 넣음
-        // 그랬을 때 5가 0 3이 최다 갯수임에도 초기 그램보다 초과된다면 -1
 
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        int kg = Integer.parseInt(input.readLine());
-        int kg_5 = kg/5;
-        int kg_3 = 0;
-        int result = kg_5+kg_3;
-        
-        while(true) {
-            if(kg_5 < 0) {
-                result = -1;
-                break;
-            } else if(kg > kg_5*5 + kg_3*3) {
-                kg_3++;
-            } else if(kg < kg_5*5 + kg_3*3) {
-                kg_5--;
-            }  else if((kg_5*5+kg_3*3) == kg) {
-                result = kg_5+kg_3;
-                break;
+class Main {
+    public static int solve(int total_kg, int num) {
+        if(total_kg%5 == 0) {
+            num = total_kg/5;
+            return num;
+        } else {
+            // 5로 안나눠졌기 때문에 3씩 빼면서 count
+            while(total_kg > 0) {
+                total_kg -= 3;
+                num++;
+
+                if(total_kg == 0) {
+                    return num;
+                }
+
+                if(total_kg%5 == 0) {
+                    num += total_kg/5;
+                    total_kg %= total_kg/5;
+                }
+            }
+            if(total_kg < 0) {
+                num = -1;
             }
         }
-        output.write(String.valueOf(result));
-        output.flush();
+        return num;
+    }
+
+    public static void main(String argc[]) throws IOException{
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int total_kg = Integer.parseInt(input.readLine());
         
+        int result = solve(total_kg, 0);
+
+        output.write(String.valueOf(result));
         input.close();
         output.close();
     }
