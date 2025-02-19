@@ -1,3 +1,26 @@
+/**
+ *  문제 이름 : 통계학
+ * 
+ *  난 이  도 : 실버 3
+ * 
+ *  아이디어 : 
+ * 
+ *  해    설 : 
+ *              산술 평균 : N개 수들의 합을 N으로 나눈 값 -> 중간에 Math.round 사용시 int값만을 사용하면 중간 연산에서 데이터 손실이 발생함
+ *                                                        방지로 answer(총합)을 double 8byte로 변환 후 계산
+ * 
+ *              중앙 값 : N개의 수들을 증가하는 순서로 나열 했을 때 중앙에 위치한 값
+ * 
+ *              최빈 값 : N개 수 들 중 가장 많이 나타난 값
+ * 
+ *              범 위 : N개의 수들 중 최댓값과 최솟값의 차이이
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -5,72 +28,92 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+
 
 class Main {
-    public int mean(int[] num_array, int repeat_num) { // 산술평균
-        int result = 0;
-        for(int i =0; i < repeat_num; i++) {
-            result += num_array[i];
+    public static int average(int array[]) {
+        int answer = 0;
+
+        for(int i =0; i< array.length; i++) {
+            answer += array[i];
         }
-        return (int)Math.round((double)result/repeat_num);
+
+        answer = (int)Math.round((double)answer/array.length);
+
+        return answer;
     }
 
-    public int duplication(int[] num_array, int repeat_num) {
-        int multi_count[] = new int[repeat_num]; //순위 정하기
-        int count =1;
-        int max =0;
+    public static int middle(int array[]) {
 
-        // 중복이지 않으면 1을, 중복이면 그 수 만큼 count해 마지막 수의 인덱스에 입력
-        for(int i =0; i < repeat_num; i++) {
-            if(i < repeat_num-1 && num_array[i] == num_array[i+1]) {
-                count++;
-            } else {
-                multi_count[i] = count;
-                if(multi_count[max] < multi_count[i]) {
-                    max = i; // 최빈값을 찾음 
-                }
-                count = 1;
-            }
-        }
+        int mid_value = array.length/2;
 
-        List<Integer> list = new ArrayList<>();
-        for(int i = 0; i< repeat_num; i++) {
-            if(multi_count[i] == multi_count[max]) {
-                list.add(num_array[i]);
-            }
-        }
+        int answer = array[mid_value];
+
+        return answer;
+    }
+
+    public static int frequent(int array[]) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        ArrayList<Integer> num2 = new ArrayList<>();
         
-        if(list.size() == 1) {
-            return list.get(0); // 1개라면 1번째 요소를
-        } else {
-            return list.get(1); // 2개 이상이라면 2번째 요소를
+
+        for(int i = 0; i< array.length; i++) {
+            int index = map.getOrDefault(array[i], 0);
+
+            map.put(array[i], index+1);
+        }   
+
+        int answer = 0;
+
+        int max_fre = Collections.max(map.values()); // 빈도수에 대한 max값
+
+        for(int key : map.keySet()) {
+            if(max_fre == map.get(key)) {
+                num2.add(key);
+            }
         }
+
+        Collections.sort(num2);
+
+        if(num2.size() > 1) {
+            return num2.get(1);
+        } else {
+            return num2.get(0);
+        }
+   }
+
+    public static int range(int array[]) {
+        int min = array[0];
+        int max = array[array.length-1];
+
+        int answer = max - min;
+
+        return answer;
     }
 
-    public int range(int[] num_array, int repeat_num) {
-        return num_array[repeat_num-1] - num_array[0];
-    }
     public static void main(String[] args) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        Main show = new Main();
 
         int repeat_num = Integer.parseInt(input.readLine());
-        int[] num_array = new int[repeat_num];
+
+        int array[] = new int[repeat_num];
 
         for(int i =0; i< repeat_num; i++) {
-            num_array[i] = Integer.parseInt(input.readLine());
+            array[i] = Integer.parseInt(input.readLine());
         }
-        Arrays.sort(num_array); // 오름차순
 
-        output.write(String.valueOf(show.mean(num_array, repeat_num))+"\n"); // 평균
-        output.write(String.valueOf(num_array[repeat_num/2])+"\n"); // 중앙값
-        output.write(String.valueOf(show.duplication(num_array, repeat_num))+"\n");
-        output.write(String.valueOf(show.range(num_array, repeat_num))); // 범위
+        Arrays.sort(array);
+
+
+        output.write(String.valueOf(average(array))+"\n");
+        output.write(String.valueOf(middle(array))+"\n");
+        output.write(String.valueOf(frequent(array))+"\n");
+        output.write(String.valueOf(range(array)));
 
         input.close();
-        output.flush();
         output.close();
     }
 }
