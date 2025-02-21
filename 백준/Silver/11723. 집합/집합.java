@@ -1,91 +1,127 @@
+/**
+ *  문제 이름 : 집합
+ * 
+ *  난 이  도 : 실버 5
+ * 
+ *  아이디어 : 
+ *              add x : S에 x 값 추가, 이미 존재하는 경우 연산 무시
+ *              remove x : S에서 x를 제거한다, 이미 존재하는 경우 연산 무시
+ *              check x : S에 x가 있으면 1을, 없으면 0을
+ *              toggle x : S에 x가 있으면 x를 제거하고, 없으면 x를 추가한다
+ *              all : S를 {1,2,3,4,5....,20} 으로 바꾼다
+ *              empty : S를 공집합으로 바꾼다다
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
-class Main {
-    public static int S[];
-    public static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    public static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+class Set {
+    static HashSet<Integer> set;
 
-
-    public static void add(int idx) {
-        S[idx] = idx;
+    Set() {
+        this.set = new HashSet<>();
     }
 
-    public static void remove(int idx) {
-        S[idx] = -1;
+    public static void add(int x) {
+        set.add(x);
     }
 
-    public static void check(int idx) throws IOException {
-        if (S[idx] != -1) {
-            output.write(String.valueOf(1)+"\n");
+    public static void remove(int x) {
+        set.remove(x);
+    }
+
+    public static int check(int x) {
+        int lookup = 0;
+
+        if(set.contains(x)) {
+            lookup = 1;
+        }
+
+        return lookup;
+    }
+
+    public static void toggle(int x) {
+        if(set.contains(x)) {
+            set.remove(x);
         } else {
-            output.write(String.valueOf(0)+"\n");
+            set.add(x);
         }
     }
-
-    public static void toggle(int idx) {
-        if (S[idx] != -1)
-            S[idx] = -1;
-        else
-            S[idx] = idx;
-    }
+    
 
     public static void all() {
-        for (int i = 1; i <= 20; i++) {
-            S[i] = i;
+        for(int i = 1; i<= 20; i++) {
+            set.add(i);
         }
     }
 
     public static void empty() {
-        for (int i = 1; i <= 20; i++) {
-            S[i] = -1;
-        }
+        set.clear();
     }
+}
 
-    public static void main(String[] args) throws IOException {
-        int repeat_num = Integer.parseInt(input.readLine());
-        S = new int[21];
-        for (int i = 0; i < 21; i++) {
-            S[i] = -1;
-        }
+class Main {
+    public static void main(String[] args) throws IOException{
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i = 0; i < repeat_num; i++) {
+        int commend_num = Integer.parseInt(input.readLine());
+
+        Set commend_set = new Set();
+
+        for(int i =0; i< commend_num; i++) {
             StringTokenizer token = new StringTokenizer(input.readLine());
-            String string = token.nextToken();
-            int num = 0;
 
-            if (token.hasMoreTokens()) {
-                num = Integer.parseInt(token.nextToken());
-            }
+            String commend = token.nextToken();
+            int num;
 
-            switch (string) {
+            switch (commend) {
                 case "add":
-                    add(num);
+                    num = Integer.parseInt(token.nextToken());
+
+                    commend_set.add(num);
                     break;
                 case "remove":
-                    remove(num);
+                    num = Integer.parseInt(token.nextToken());
+
+                    commend_set.remove(num);
                     break;
                 case "check":
-                    check(num);
+                    num = Integer.parseInt(token.nextToken());
+
+                    output.write(String.valueOf(commend_set.check(num))+"\n");
                     break;
+
                 case "toggle":
-                    toggle(num);
+                    num = Integer.parseInt(token.nextToken());
+
+                    commend_set.toggle(num);
                     break;
+
                 case "all":
-                    all();
+                    commend_set.all();
                     break;
                 case "empty":
-                    empty();
+                    commend_set.empty();
+                default:
                     break;
             }
         }
 
         input.close();
-        output.flush();
         output.close();
     }
 }
