@@ -1,3 +1,18 @@
+/**
+ *  문제 이름 : ATM
+ * 
+ *  난 이  도 : 실버 4
+ * 
+ *  아이디어 : ATM 돈을 뽑은 시간을 최소화한 시간을 출력해라라
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,32 +22,34 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 class Main {
-    public static void main(String[] args) throws IOException{
+    public static void main(String argc[]) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int repeat_num = Integer.parseInt(input.readLine());
+        int num = Integer.parseInt(input.readLine());
 
+        int[] array = new int[num];
         StringTokenizer token = new StringTokenizer(input.readLine());
-        int takes_time[] = new int[repeat_num+1];
-        for(int i =1; i<= repeat_num; i++) {
-            takes_time[i] = Integer.parseInt(token.nextToken());
+
+        for(int i =0; i< num; i++) {
+            array[i] = Integer.parseInt(token.nextToken());
         }
 
-        Arrays.sort(takes_time);
-        
-        int total = 0;
-        for(int i =1; i<= repeat_num; i++) {
-            int start = 1;
-            while(start <= i){
-                total += takes_time[start];
-                start++;
-            }
+        Arrays.sort(array);
+
+        for(int i =1; i < num; i++) {
+            array[i] += array[i-1];
         }
 
-        output.write(String.valueOf(total));
+        int answer = 0;
+
+        for(int i =0; i< num; i++) {
+            answer += array[i];
+        }
+
+        output.write(String.valueOf(answer));
+
         input.close();
-        output.flush();
         output.close();
     }
 }
