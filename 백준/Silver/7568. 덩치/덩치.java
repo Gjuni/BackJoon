@@ -1,3 +1,23 @@
+/**
+ *  문제 이름 : 덩치
+ * 
+ *  난 이  도 : 실버 5
+ * 
+ *  아이디어 : 덩치 순위를 매길려고 한다.
+ *              이때 weight와 height가 주어지는데 간략하게 w와 h라 하겠다.
+ *              
+ *              w1 > w2와 h1 > h2이라면 1번 사람이 압도적으로 크기 때문에 덩치가 더 크다고 말할 수 있다.
+ *              다만 w1 > w2지만 h1 < h2라면 1번 사람이  몸무게는 더 나가지만  2번보다 키가 작기에 덩치로 비교는 불가능하다.
+ *              그럴 경우에는 공동 순위로 매긴다.
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -6,44 +26,51 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 class Main {
-    public static void main(String[] args) throws IOException {
+    public static void solve(int weight[], int height[], int rank[]) {
+        
+        for(int i =0; i< weight.length; i++) {
+            int index = 1;
+
+            for(int j = 0; j < weight.length; j++) {
+                if(i == j) {
+                    continue;
+                }
+
+                if(weight[i] < weight[j] && height[i] < height[j]) {
+                    index++;
+                }
+            }
+
+            rank[i] = index;
+        }
+    }
+    
+    public static void main(String[] args) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int num = Integer.parseInt(input.readLine());
-        int[][] info = new int[num][2];
+        int repeat_num = Integer.parseInt(input.readLine());
+        int rank[] = new int[repeat_num];
 
-        for(int i =0; i< num; i++) {
-            StringTokenizer token = new StringTokenizer(input.readLine());        
-            info[i][0] = Integer.parseInt(token.nextToken());
-            info[i][1] = Integer.parseInt(token.nextToken());
-        }
-        int[] rank_record = new int[num];
-        
-        for(int i =0; i< num; i++) {
-            int rank =num;
-            int count = 0;
-            for(int j = 0; j < num; j++) {
-                if((info[i][0] < info[j][0]) && (info[i][1] < info[j][1])) { // 몸무게 키 둘다 작다면
-                    rank_record[i] = rank;
-                } else if(((info[i][0] <= info[j][0]) && (info[i][1] >= info[j][1])) || ((info[i][0] >= info[j][0]) && (info[i][1] <= info[j][1]))) {
-                    rank_record[i] = rank;
-                    count++;
-                } if((info[i][0] > info[j][0]) && (info[i][1] > info[j][1])) {
-                    rank_record[i] = --rank;
-                }
-            }
-            rank_record[i] -= count-1;
+        int weight[] = new int[repeat_num];
+        int height[] = new int[repeat_num];
+
+        for(int i =0; i< repeat_num; i++) {
+            StringTokenizer token = new StringTokenizer(input.readLine());
+
+            int w = Integer.parseInt(token.nextToken());
+            int h = Integer.parseInt(token.nextToken());
+
+            weight[i] = w;
+            height[i] = h;
         }
 
-        for(int i =0; i< num; i++) {
-            output.write(String.valueOf(rank_record[i]));
-            if(i < num-1) {
-                output.write(" ");
-            }
+        solve(weight, height, rank);
+
+        for(int num : rank) {
+            output.write(String.valueOf(num)+" ");
         }
-        
-        output.flush();
+
         input.close();
         output.close();
     }
