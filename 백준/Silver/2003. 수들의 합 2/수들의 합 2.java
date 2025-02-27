@@ -1,3 +1,19 @@
+/**
+ *  문제 이름 : 수들의 합 2
+ * 
+ *  난 이  도 : 실버 4
+ * 
+ *  아이디어 : N개의 수로 된 수열 A[N]이 존재한다. 
+ *              A[i]부터 A[j]까지 합이 M이 되는 경우의 수를 구하는 프로그램을 작성하라
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -5,44 +21,56 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        // 입력한 수가 넘어가면 start --, 아니라면 end++;
-        // 입력한 수와 같다면 count++ 후 end++;
-
-        StringTokenizer token1 = new StringTokenizer(input.readLine());
-        int repeat_num = Integer.parseInt(token1.nextToken());
-        int wants_num = Integer.parseInt(token1.nextToken());
-        int num_array[] = new int[repeat_num]; 
-        token1 = new StringTokenizer(input.readLine());
-        for(int i =0; i< repeat_num; i++) {
-            num_array[i] = Integer.parseInt(token1.nextToken());
-        }
+public class Main {
+    public static int solve(int[] arr, int wants_num) {
+        int answer = 0;
         int start = 0;
-        int end = 1;
-        int total = num_array[start];
-        int count =0;
-        
-        while(end <= repeat_num) {
-            if(total >= wants_num) {
-                if(total == wants_num) {
-                    count++;
-                }
-                total -= num_array[start++];
+        int end = 0;
+        int temp = arr[0];
+
+        while(end < arr.length) {
+            if(temp < wants_num) {
+                if(end+1 < arr.length)
+                    temp += arr[++end];
+                else
+                    break;
+            } else if(temp > wants_num) {
+                temp -= arr[start++];
             } else {
-                if(end < repeat_num) {
-                    total += num_array[end];
+                answer++;
+                
+                if(start+1 < arr.length) { 
+                    start++;
+                    end = start;
+                } else {
+                    break;
                 }
-                end++;
+                temp = arr[start];
             }
         }
+        return answer;
+    }
 
-        output.write(String.valueOf(count));
+    public static void main(String argc[]) throws IOException{
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        StringTokenizer token = new StringTokenizer(input.readLine());
+
+        int arr_lenght = Integer.parseInt(token.nextToken());
+        int wants_num = Integer.parseInt(token.nextToken());
+
+        int arr[] = new int[arr_lenght];
+
+        token = new StringTokenizer(input.readLine());
+
+        for(int i =0; i< arr_lenght; i++) {
+            arr[i] = Integer.parseInt(token.nextToken());
+        }
+
+        output.write(String.valueOf(solve(arr, wants_num)));
 
         input.close();
-        output.flush();
         output.close();
     }
 }
