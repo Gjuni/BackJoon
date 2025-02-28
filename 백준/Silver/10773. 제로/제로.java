@@ -1,68 +1,52 @@
+/**
+ *  문제 이름 : 제로
+ * 
+ *  난 이  도 : 실버 4
+ * 
+ *  아이디어 : 잘못된 수를 부를 때마다 0을 외침, 가장 최근에 쓴 수를 지우게 시킴
+ *              모든 수를 받아 적은 후 그 수의 합을 알고 싶어 함
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 
 class Main {
-    public class my_stack {
-        int size;
-        int top;
-        int[] stack;
-
-        public my_stack(int size) {
-            this.size = size;
-            top = -1;
-            stack = new int[size];
-        }
-
-        public boolean isEmpty() {
-            return (top == -1);
-        }
-        public boolean isFull() {
-            return (top == stack.length-1);
-        }
-        public void push(int item) {
-            if(isFull()) {
-                return;
-            }
-            stack[++top] = item;
-        }
-        public int pop() {
-            if(isEmpty()) {
-                return -1;
-            }
-            int value = stack[top--];
-            this.size--;
-            return value;
-        }
-        public int size() {
-            return top+1;
-        }
-    }
     public static void main(String[] args) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
         int repeat_num = Integer.parseInt(input.readLine());
-        Main rc = new Main();
-        my_stack stack = rc.new my_stack(repeat_num);
+        ArrayDeque<Integer> list = new ArrayDeque<>();
 
         for(int i =0; i< repeat_num; i++) {
             int num = Integer.parseInt(input.readLine());
 
-            if(num != 0) {
-                stack.push(num);
-            } else if(num == 0) {
-                stack.pop();
+            if(num > 0) {
+                list.offer(num);
+            } else {
+                list.pollLast();
             }
         }
-        int total =0;
-        while(!stack.isEmpty()) {
-            total += stack.pop();
-        }
-        output.write(String.valueOf(total));
-        output.flush();
-        output.close();
+
+        int answer = 0;
+
+        for(int num : list) 
+            answer += num;
+
+        output.write(String.valueOf(answer));
+
         input.close();
+        output.close();
     }
 }
