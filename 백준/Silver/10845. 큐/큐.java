@@ -1,89 +1,124 @@
+/**
+ *  문제 이름 : 큐
+ * 
+ *  난 이  도 : 실버 4
+ * 
+ *  아이디어 : 일반적인 큐 구현
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.StringTokenizer;
 
-class Main {
-    public class Queue {
-        int size;
-        int[] queue;
-        int top;
-        int start;
+class _Queue {
+    ArrayDeque<Integer> q;
 
-        public Queue(int size) {
-            this.size = size;
-            top = -1;
-            start = -1;
-            queue = new int[size];
-        }
+    public _Queue() {
+        this.q = new ArrayDeque<>();
+    }
 
-        public boolean isEmpty() {
-            return (top == start);
-        }
-        public boolean isFull() {
-            return (queue.length-1 == top);
-        }
 
-        public void push(int item) {
-            if(isFull()) {
-                return;
-            }
-            queue[++top] = item;
-        }
-
-        public int pop() {
-            if(isEmpty()) {
-                return -1;
-            }
-            this.size++;
-            return queue[++start];
-        }
-
-        public int size() {
-            return top-start;
-        }
-
-        public int empty() {
-            return isEmpty() ? 1 : 0;
-        }
-
-        public int front() {
-            if(isEmpty()) {
-                return -1;
-            }
-            return queue[start+1];
-        }
-
-        public int back() {
-            if(isEmpty()) {
-                return -1;
-            }
-            return queue[top];
+    public int empty() {
+        if(q.isEmpty()) {
+            return 1;
+        } else {
+            return 0;
         }
     }
-    public static void main(String[] args) throws IOException{
+
+    public void push(int data) {
+        q.offer(data);
+    }
+
+    public int pop() {
+        if(empty() == 1) {
+            return -1;
+        } else {
+            return q.poll();
+        }
+    }
+
+    public int _size() {
+        return q.size();
+    }
+
+    public int front() {
+        if(empty() == 1) {
+            return -1;
+        } else {
+            return q.peek();
+        }
+    }
+
+    public int back() {
+        if(empty() == 1) {
+            return -1;
+        } else {
+            return q.peekLast();
+        }
+    }
+}
+
+
+public class Main {
+    public static void main(String argc[]) throws IOException{
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
         int repeat_num = Integer.parseInt(input.readLine());
-        Main br = new Main();
-        Queue queue = br.new Queue(repeat_num);
+        _Queue q = new _Queue();
 
+        for(int i = 0; i < repeat_num; i++) {
+            StringTokenizer token = new StringTokenizer(input.readLine());
 
-        for(int i =0; i< repeat_num; i++) {
-            String command = input.readLine();
+            String commend = token.nextToken();
+            int num = 0;
 
-            if(command.startsWith("push")) {
-                int item = Integer.parseInt(command.split(" ")[1]);
-                queue.push(item);
-            } else if(command.equals("pop")) {
-                System.out.println(queue.pop());
-            } else if(command.equals("size")) {
-                System.out.println(queue.size());
-            } else if(command.equals("empty")) {
-                System.out.println(queue.empty());
-            } else if(command.equals("front")) {
-                System.out.println(queue.front());
-            } else if(command.equals("back")) {
-                System.out.println(queue.back());
+            switch (commend) {
+                case "push":
+                    num = Integer.parseInt(token.nextToken());
+                    q.push(num);
+                    break;
+
+                case "pop":
+                    int result = q.pop();
+                    output.write(String.valueOf(result)+"\n");
+                    break;
+
+                case "front":
+                    result = q.front();
+                    output.write(String.valueOf(result)+"\n");
+                    break;
+
+                case "back" :
+                    result = q.back();
+                    output.write(String.valueOf(result)+"\n");
+                    break;
+
+                case "size" :
+                    result = q._size();
+                    output.write(String.valueOf(result)+"\n");
+                    break;
+
+                case "empty" :
+                    result = q.empty();
+                    output.write(String.valueOf(result)+"\n");
+                    break;
             }
         }
+
+        input.close();
+        output.close();
     }
 }
