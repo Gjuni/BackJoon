@@ -1,41 +1,63 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
+/**
+ *  문제 이름 : 수강신청
+ * 
+ *  난 이  도 : 실버 3
+ * 
+ *  아이디어 : 다시 신청하면 재등록됨
+ *            수강 신청된 인원 순서대로 출력하라
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
 
-class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        LinkedHashMap<String, Integer> mapping = new LinkedHashMap<>();
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String argc[]) throws IOException{
 
         StringTokenizer token = new StringTokenizer(input.readLine());
 
-        int out_num = Integer.parseInt(token.nextToken());
+        int ineednum = Integer.parseInt(token.nextToken());
         int repeat_num = Integer.parseInt(token.nextToken());
 
-        for (int i = 1; i <= repeat_num; i++) {
-            String identity_string = input.readLine();
-            if(mapping.containsKey(identity_string)) {
-                mapping.remove(identity_string);
+        HashMap<String, Integer> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+
+        for (int i = 0; i < repeat_num; i++) {
+            String s = input.readLine();
+
+            if(map.containsKey(s)) {
+                map.replace(s, i);
+                continue;
             }
-            mapping.put(identity_string, i);
+
+            map.put(s, i);
+            list.add(s);
         }
 
-        int idx = 0;
-        for (String key : mapping.keySet()) {
-            if (idx == out_num) {
-                break;
+        list.sort(new Comparator<String>() {
+            public int compare(String a, String b) {
+                return map.get(a).compareTo(map.get(b));
             }
-            output.write(key + "\n");
-            idx++;
+        });
+
+        int index = 0;
+        for(String i : list) {
+            if(index < ineednum) {
+                output.write(i+"\n");
+            }
+            index++;
         }
 
         input.close();
-        output.flush();
         output.close();
     }
 }
