@@ -1,33 +1,30 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
+
+import java.io.*;
 import java.util.HashSet;
 
 class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String argc[]) throws IOException {
 
-        String string = input.readLine();
+        String s = input.readLine();
 
         HashSet<String> set = new HashSet<>();
-        
-        for(int i =0; i < string.length(); i++) {
-            StringBuilder sb = new StringBuilder();
-            for(int j = i; j< string.length(); j++) {
-                sb.append(string.charAt(j)); // 문자열을 합침
-                set.add(sb.toString());
+
+
+        int len = s.length();
+
+        for (int i = 0; i < len; i++) {
+            for (int j = i+1; j <= len; j++) {
+                set.add(s.substring(i, j)); // endIndex는 index값에서 포함되지 않음
             }
         }
-        
         
         output.write(String.valueOf(set.size()));
 
         input.close();
-        output.flush();
         output.close();
     }
 }
