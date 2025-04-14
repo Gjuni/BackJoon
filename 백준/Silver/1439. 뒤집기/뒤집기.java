@@ -1,46 +1,58 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+/**
+ *  문제 이름 : 뒤집기
+ * 
+ *  난 이  도 : 실버 5
+ * 
+ *  아이디어 : 101001 을 봤을 때 같은 수로 만들 수 있는 최소한의 횟수를 구하여라
+ *              2가 될 것이다. 
+ * 
+ *  해    설 : f
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+import java.io.*;
 
-        String bi_string = input.readLine();
-        int[] array = new int[bi_string.length()];
+public class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for(int i =0; i< bi_string.length(); i++) {
-            if(i == bi_string.length()-1 && bi_string.charAt(i) != array[i-1]) {
-                array[i] = bi_string.charAt(i) - '0';
-            } else if(i < bi_string.length()-1 && bi_string.charAt(i) != bi_string.charAt(i+1)) {
-                array[i] = bi_string.charAt(i)- '0';
-            } else {
-                array[i] = -1;
+    public static void main(String argc[]) throws IOException{
+
+        String string = input.readLine();
+
+        int zero_flip_count = 0;
+        int one_filp_count = 0;
+
+
+        char added = string.charAt(0);
+        if(added == '0') {
+            one_filp_count++;
+        } else if(added == '1') {
+            zero_flip_count++;
+        }
+
+        for(int i =1; i< string.length(); i++) {
+            char before_num = string.charAt(i-1); // 처음 char값을 읽음
+            char current_char = string.charAt(i);
+
+            if(before_num != current_char) {
+                if (current_char == '0') {
+                    one_filp_count ++;
+                } else {
+                    zero_flip_count ++;
+                }
             }
-        }
-        
-        int count_one =0;
-        int count_zero = 0;
-        
-        for(int i =0; i< bi_string.length(); i++) {
-            if(array[i] == 0) {
-                count_zero ++;
-            } else if(array[i] == 1){
-                count_one++;
-            }
-        }
 
-        if(count_one >= count_zero) {
-            output.write(String.valueOf(count_zero));
-        } else {
-            output.write(String.valueOf(count_one));
-        }
+        }   
+        
+        
+        output.write(String.valueOf(Math.min(one_filp_count, zero_flip_count)));
 
         input.close();
-        output.flush();
         output.close();
     }
 }
