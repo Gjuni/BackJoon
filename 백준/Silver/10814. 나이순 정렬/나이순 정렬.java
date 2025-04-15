@@ -1,50 +1,79 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+/**
+ *  문제 이름 : 나이순 정렬
+ * 
+ *  난 이  도 : 실버 5
+ * 
+ *  아이디어 : 나이순으로 정렬, 나이가 같으면 먼저 가입한 사람이 앞에 오는 순서로 정렬
+ * 
+ *  해    설 : 
+ *              Class 생성 시 String 객체를 사용해야함. 일반 string은  Type 에러가 뜬다.
+ *              
+ *              Class간 정렬 시 Comparable 인터페이스를 사용하게 되는데 Class안에 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
+
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        int repeat_num = Integer.parseInt(input.readLine());
-        String info[][] = new String[repeat_num][2];
+class info {
+    int age;
+    String name;
+    int order;
 
-        for(int i =0; i< repeat_num; i++) {
+    public info(int age, String name, int order) {  
+        this.age = age;   
+        this.name = name; 
+        this.order = order; 
+    }
+}
+
+public class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
+    public static void main(String[] args) throws IOException{
+        int repeat_num = Integer.parseInt(input.readLine());
+        List<info> people_list = new ArrayList<>();
+
+        for (int i = 0; i < repeat_num; i++) {
             StringTokenizer token = new StringTokenizer(input.readLine());
-            info[i][0] = token.nextToken();
-            info[i][1] = token.nextToken();
+
+            int age = Integer.parseInt(token.nextToken());
+            String name = token.nextToken();
+
+            info peopleInfo = new info(age, name, i);
+
+            people_list.add(peopleInfo);
         }
 
-        Arrays.sort(info, new Comparator<String []>() {
-            public int compare(String[] a, String[] b) {
-                return (Integer.parseInt(a[0]) - Integer.parseInt(b[0]));
+        people_list.sort(new Comparator<info>() {
+            @Override
+            public int compare(info o1, info o2) {
+                if(o1.age == o2.age)  {
+                    if(o1.order != o2.order) {
+                        return (o1.order - o2.order);
+                    }
+                } else {
+                    return (o1.age - o2.age);
+                }
+                return 0;
             }
         });
-        
-        // for(int i = repeat_num-1; i >= 0; i--) {
-        //     for(int j = i-1; j >= 0; j--) {
-        //         if(age[i]  age[j]) {
-        //             int temp = age[i];
-        //             age[i] = age[j];
-        //             age[j] = temp;
-        //             String temp2 = name[i];
-        //             name[i] = name[j];
-        //             name[j] = temp2;
-        //         }
-        //     }
-        // }
 
-        for(int i =0; i< repeat_num; i++) {
-            output.write(info[i][0] + " "+info[i][1]+"\n");
+        for(info i : people_list) {
+            output.write(String.valueOf(i.age)+" "+i.name+"\n");
         }
-        
+
+
         input.close();
-        output.flush();
         output.close();
     }
 }
