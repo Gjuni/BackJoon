@@ -1,44 +1,71 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+/**
+ *  문제 이름 : 좌표 정렬하기 2
+ * 
+ *  난 이  도 : 실버 5
+ * 
+ *  아이디어 : Y축을 기준으로 좌표를 정렬하고 Y축이 동일하다면 X좌표를 기준으로 정렬할 것
+ * 
+ *  해    설 : B11650 참고
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
+
+ import java.io.*;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        //2차원 y좌표 기준으로 정렬
-        // x좌표가 동일하다면 y좌표 기준으로 정렬
+class coordinate  {
+    int x;
+    int y;
 
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+    public coordinate (int x, int y){
+        this.x = x;
+        this.y = y; 
+    }
+}
 
+
+ public class Main {
+     static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+     static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+     public static void main(String[] args) throws IOException{
         int repeat_num = Integer.parseInt(input.readLine());
-        int[][] num_array = new int[repeat_num][2];
+        List<coordinate> list = new ArrayList<>();
 
-        for(int i =0; i< repeat_num; i++) {
-            StringTokenizer token1 = new StringTokenizer(input.readLine());
-            num_array[i][0] = Integer.parseInt(token1.nextToken());
-            num_array[i][1] = Integer.parseInt(token1.nextToken());
+        for (int i = 0; i < repeat_num; i++) {
+            StringTokenizer token = new StringTokenizer(input.readLine());
+
+            int x = Integer.parseInt(token.nextToken());
+            int y = Integer.parseInt(token.nextToken());
+
+            coordinate c = new coordinate(x, y);
+
+            list.add(c);
         }
-        // Arrays.sort(num_array, (a,b)-> { index는 1부터 비교})
-        Arrays.sort(num_array, new Comparator<int[]>() {
-            public int compare(int[] a, int[] b) {
-                if(a[1] == b[1]) { // y좌표  a[0][1] index기준 1번째 비교
-                    return Integer.compare(a[0], b[0]); // x좌표
-                } else {
-                    return Integer.compare(a[1], b[1]); // 다르다면 y좌표로 정렬
+
+
+        list.sort(new Comparator<coordinate>() {
+            @Override
+            public int compare(coordinate o1, coordinate o2) {
+                if(o1.y == o2.y) {
+                    return o1.x - o2.x;
                 }
+                return o1.y-o2.y;
             }
         });
 
-        for(int i =0; i< repeat_num; i++) {
-            output.write(String.valueOf(num_array[i][0]+" "+num_array[i][1]+"\n"));
+        for(coordinate i : list) {
+            output.write(String.valueOf(i.x) + " "+ String.valueOf(i.y)+"\n");
         }
-        output.flush();
-        output.close();
-        input.close();
-    }
-}
+        
+         input.close();
+         output.close();
+     }
+ }
+ 
