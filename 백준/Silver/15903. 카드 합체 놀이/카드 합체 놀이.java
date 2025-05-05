@@ -1,63 +1,68 @@
+/**
+ *  문제 이름 : 카드 합체 놀이
+ * 
+ *  난 이  도 : 실버 1
+ * 
+ *  아이디어 : 
+ *              카드 N 장을 가지고 있다.
+ *              1. x 번째 카드와 y 번째 카드를 골라 두 장에 쓰여진 수를 더한다.
+ *              2. 계산한 값을 x와 y에 덮어씌운다.
+ * 
+ *              이 것을 m 번 한다. 
+ *              가장 작은 점수를 만드는 경우는?
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
 
-class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+ import java.io.*;
+import java.util.*;
+ 
+ public class Main {
+     static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+     static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer token;
+     public static long solve(PriorityQueue<Long> card, int m) {
+        long answer = 0;
 
-        token = new StringTokenizer(input.readLine());
+        for (int i = 0; i < m; i++) {
+            long card_1 = card.poll();
+            long card_2 = card.poll();
 
-        int number_cards = Integer.parseInt(token.nextToken());
-        long add_times = Long.parseLong(token.nextToken());
-        
+            long new_card = card_1+card_2;
 
-        // 2 3 6
-        // 5 5 6    :1 
-        // 16
-
-        // 1 2 3 4
-        // 3 3 3 4 : 1
-        // 6 6 3 4 : 2
-        // 19
-        PriorityQueue<Long> cards = new PriorityQueue<>();
-        token = new StringTokenizer(input.readLine());
-
-        for(int i =0; i< number_cards; i++) {
-            long num = Long.parseLong(token.nextToken());
-            cards.offer(num);
+            card.add(new_card);
+            card.add(new_card);
         }
 
-        
-
-        for(long i = 0; i < add_times; i++) {
-            long num1 = cards.poll();
-            long num2 = cards.poll();
-   
-            long total = num1+ num2;
-            
-            cards.offer(total);
-            cards.offer(total);
+        for(long num : card) {
+            answer += num;
         }
 
-        long anwser = 0;
+        return answer;
+     }
+     public static void main(String[] args) throws IOException{
+         StringTokenizer token = new StringTokenizer(input.readLine());
 
-        for(int i =0; i< number_cards; i++) {
-            long number = cards.poll();
-            anwser += number;
-        }
-        
-        output.write(String.valueOf(anwser));
+         int n = Integer.parseInt(token.nextToken());
+         int m = Integer.parseInt(token.nextToken());
 
-        input.close();
-        output.close();
-    }
-}
+         PriorityQueue<Long> card = new PriorityQueue<>();
+
+         token = new StringTokenizer(input.readLine());
+
+         for (int i = 0; i < n; i++) {
+            card.add(Long.parseLong(token.nextToken()));
+         }
+ 
+         output.write(String.valueOf(solve(card, m)));
+
+         input.close();
+         output.close();
+     }
+ }
