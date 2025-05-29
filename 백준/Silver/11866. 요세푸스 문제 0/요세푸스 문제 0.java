@@ -1,54 +1,82 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+/**
+ *  문제 이름 : 
+ * 
+ *  난 이  도 : 
+ * 
+ *  아이디어 : 
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
 
-class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringBuilder stringbuilder = new StringBuilder();
 
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+
+    static ArrayDeque<Integer> init_deque = new ArrayDeque<>();
+    static Queue<Integer> new_Queue = new ArrayDeque<>();
+
+
+    static public void solve(int count_num) {
+        int index = 0;
+
+
+        while(!init_deque.isEmpty()) {
+            index++;
+            
+            int current_num = init_deque.poll();
+
+            if(index < count_num) {
+                init_deque.addLast(current_num);
+            } 
+
+            if(index == count_num) {
+                new_Queue.add(current_num);
+                index = 0;
+            }
+
+        }
+    }
+
+
+    public static void main(String[] args) throws IOException{
         StringTokenizer token = new StringTokenizer(input.readLine());
-        Queue<Integer> yocepus = new LinkedList<>();
-        Queue<Integer> result = new LinkedList<>();
-        int size_Queue = Integer.parseInt(token.nextToken());
-        int idx = Integer.parseInt(token.nextToken());
 
-        for(int i =0; i< size_Queue; i++) {
-            yocepus.add(i+1);
+        int count_num = Integer.parseInt(token.nextToken());
+        int add_count = Integer.parseInt(token.nextToken());
+
+        for (int i = 1; i <= count_num; i++) {
+            init_deque.add(i);
         }
 
-        int countDown = 0;
+        solve(add_count);
 
-        while(!(yocepus.isEmpty())) {
-            countDown++;
-            if(countDown == idx) {
-                result.add(yocepus.remove());
-                countDown = 0;
-            } else {
-                yocepus.add(yocepus.remove());
+        StringBuilder build = new StringBuilder();
+
+        build.append('<');
+
+        for(int i = 0; i < count_num; i++) {
+            build.append(new_Queue.poll());
+
+            if(i < count_num-1) {
+                build.append(',');
+                build.append(' ');
             }
         }
-        
-        stringbuilder.append("<");
-        while(!result.isEmpty()) {
-            stringbuilder.append(result.poll());
 
-            if(!result.isEmpty()) {
-                stringbuilder.append(", ");
-            }
-        }
-        stringbuilder.append(">");
+        build.append('>');
 
-        output.write(String.valueOf(stringbuilder));
+        output.write(build.toString());
 
-        output.flush();
-        output.close();
         input.close();
+        output.close();
     }
 }
