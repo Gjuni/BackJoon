@@ -1,92 +1,108 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+/**
+ *  문제 이름 : 체스판 다시 칠하기
+ * 
+ *  난 이  도 : 실버 4
+ * 
+ *  아이디어 : 
+ *             체스판을 다시 칠하는 칸의 갯수가 최소가 되는 칸의 갯수를 구하라
+ * 
+ *  해    설 : 
+ * 
+ *  시간 복잡도 : 
+ * 
+ *  공간 복잡도 : 
+ *    
+ */
+
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static int solve(String[] chess_board, int width, int height) {
-        String[] white_Board = {
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW"
-        };
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        String[] Black_Board = {
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB",
-            "BWBWBWBW",
-            "WBWBWBWB"
-        };
+    static String black_arr[] = {
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB"
+    };
 
-        int answer_black = Integer.MAX_VALUE;
-        int answer_white = Integer.MAX_VALUE;
-        int inc_height = height - 8 + 1;
-        int inc_width = width - 8 + 1;
+    static String white_arr[] = {
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW",
+        "WBWBWBWB",
+        "BWBWBWBW"
+    };
 
-        // Find the minimum changes for each sub-board of size 8x8
-        for (int ih = 0; ih < inc_height; ih++) {
-            for (int iw = 0; iw < inc_width; iw++) {
-                int reset_black_ans = 0;
-                int reset_white_ans = 0;
 
-                // Check each 8x8 block starting from (ih, iw)
-                for (int h = ih; h < 8 + ih; h++) {
-                    String black = Black_Board[h - ih];
-                    String white = white_Board[h - ih];
-                    String main_board = chess_board[h];
+    public static int answer(String arr[], int h, int w) {
+        
+        int index_h = h-8+1;
+        int index_w = w-8+1;
 
-                    for (int w = iw; w < 8 + iw; w++) {
-                        char compare_black = black.charAt(w - iw);
-                        char compare_white = white.charAt(w - iw);
-                        char main_chess = main_board.charAt(w);
+        int black_answer = Integer.MAX_VALUE;
+        int white_answer = Integer.MAX_VALUE;
 
-                        if (main_chess != compare_black) {
-                            reset_black_ans++;
+        for (int i = 0; i < index_h; i++) {
+            for (int j = 0; j < index_w; j++) {
+                int temp_black = 0;
+                int temp_white = 0;
+
+                
+                for(int temp_h = i; temp_h < 8 + i; temp_h++) {
+                    String black = black_arr[temp_h - i];
+                    String white = white_arr[temp_h - i];
+                    String curr_boardLine = arr[temp_h];
+
+                    for(int temp_w = j; temp_w < 8 + j; temp_w++) {
+                        char compare_black = black.charAt(temp_w - j);
+                        char compare_white = white.charAt(temp_w - j);
+                        char curr_board = curr_boardLine.charAt(temp_w);
+
+                        if(curr_board != compare_black) {
+                            temp_black ++;
                         }
 
-                        if (main_chess != compare_white) {
-                            reset_white_ans++;
+                        if(curr_board != compare_white) {
+                            temp_white ++;
                         }
                     }
                 }
 
-                // Update the minimum changes for black and white boards
-                answer_black = Math.min(answer_black, reset_black_ans);
-                answer_white = Math.min(answer_white, reset_white_ans);
+                black_answer = Math.min(temp_black, black_answer);
+                white_answer = Math.min(temp_white, white_answer);
             }
         }
 
-        // Return the minimum of the two
-        return Math.min(answer_black, answer_white);
+        return Math.min(black_answer, white_answer);
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-
+    public static void main(String[] args) throws IOException{
         StringTokenizer token = new StringTokenizer(input.readLine());
 
-        int height = Integer.parseInt(token.nextToken());
-        int width = Integer.parseInt(token.nextToken());
+        int h = Integer.parseInt(token.nextToken());
+        int w = Integer.parseInt(token.nextToken());
 
-        String[] chess_board = new String[height];
+        String arr[] = new String[h];
 
-        for (int h = 0; h < height; h++) {
-            chess_board[h] = input.readLine();
+        for (int i = 0; i < h; i++) {
+
+            String current = input.readLine();
+
+            arr[i] = current;
         }
 
-        output.write(String.valueOf(solve(chess_board, width, height)));
+        output.write(String.valueOf(answer(arr, h, w)));
 
         input.close();
         output.close();
