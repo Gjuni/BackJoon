@@ -1,59 +1,62 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-class Main {
-    static boolean check[];
-    public static void add(int[][] graph, int x, int y) {
-        graph[x][y] = 1;
-        graph[y][x] = 1;
-    }
+public class Main {
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+    static int[][] graph;
+    static boolean[] visit;
+    static int answer = 0;
+    
+    public static void solve(int num)  {
+        visit[num] = true;
 
-    public static void node_count(int[][] graph, int start, int vertax) {
-        if(check[start]) {
-            return;
-        } else {
-            check[start] = true;
+        Queue<Integer> queue = new ArrayDeque<>();
 
-            for(int i =1; i<= vertax; i++) {
-                if(graph[start][i] == 1) {
-                    node_count(graph, i, vertax);
+        queue.add(num);
+
+        while(!queue.isEmpty()) {
+            int curNum = queue.poll();
+
+            for (int i = 1; i < graph[curNum].length; i++) {
+                if(graph[curNum][i] == 1 && visit[i] == false) {
+                    visit[i] = true;
+                    queue.add(i);
                 }
             }
         }
     }
-    public static void main(String[] args) throws IOException{
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        StringTokenizer repeat = new StringTokenizer(input.readLine());
-        int vertax = Integer.parseInt(repeat.nextToken());
-        int node = Integer.parseInt(repeat.nextToken());
 
-        int graph[][] = new int[vertax+1][vertax+1];
-        check = new boolean[vertax+1];
 
-        for(int i =0; i< node; i++) {
-            StringTokenizer token = new StringTokenizer(input.readLine());
+    public static void main(String argc[]) throws IOException{
+        StringTokenizer token = new StringTokenizer(input.readLine());
+
+        int node = Integer.parseInt(token.nextToken());
+        int vector = Integer.parseInt(token.nextToken());
+
+        graph = new int[node+1][node+1];
+        visit = new boolean[node+1];
+
+        for (int i = 0; i < vector; i++) {  
+            token = new StringTokenizer(input.readLine());
 
             int x = Integer.parseInt(token.nextToken());
             int y = Integer.parseInt(token.nextToken());
 
-            add(graph, x, y);
+            graph[y][x] = 1;
+            graph[x][y] = 1;
         }
-        int answer = 0;
-        for(int i =1; i<= vertax; i++) {
-            if(!check[i]) {
-                node_count(graph, i, vertax);
+
+        for (int i = 1; i <= node; i++) {
+            if(visit[i] == false) {
+                solve(i);
                 answer++;
             }
         }
+
         output.write(String.valueOf(answer));
+
         input.close();
-        output.flush();
         output.close();
     }
 }
